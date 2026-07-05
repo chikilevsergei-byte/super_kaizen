@@ -225,6 +225,7 @@ async def format_similar_info(problem, session) -> str:
 
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
+    await delete_user_message(message)  # Удаляем команду /start
     await state.clear()
     
     async with async_session() as session:
@@ -1018,7 +1019,13 @@ async def _show_problems_for_update(message_or_callback, user_id: int):
         problems = [p for p in problems if p.status.value != "Решена"]
         
         if not problems:
-            await message_or_callback.answer(f"🎉 В вашем {scope_name} нет активных проблем для обновления. Все задачи закрыты!")
+            keyboard = [[InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_update")]]
+            await smart_send(
+                message_or_callback,
+                f"🎉 <b>В вашем {scope_name} нет активных проблем для обновления.</b>\n\nВсе задачи закрыты!",
+                parse_mode="HTML",
+                reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
+            )
             return
         
         keyboard = []
@@ -1088,6 +1095,7 @@ async def action_instruction(callback: CallbackQuery, state: FSMContext):
 
 @router.message(Command("feedback"))
 async def cmd_feedback(message: Message, state: FSMContext):
+    await delete_user_message(message)  # Удаляем команду /feedback
     await state.clear()
     await smart_send(message, 
         "💬 <b>Обратная связь</b>\n\nНапишите ваш отзыв о работе бота:",
