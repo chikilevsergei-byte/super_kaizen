@@ -1,0 +1,67 @@
+# Environment variables (СЕКРЕТЫ!)
+.env
+.env.local
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Backup files
+*.backup
+*.backup_*
+
+# Patch and fix scripts
+apply_*.py
+fix_*.py
+patch_*.py
+*_cleanup.py
+*_patch.py
+*_fix.py
+
+# Test files
+test_*.py
+*_test.py
+
+# Temporary files
+*.tmp
+*.temp
