@@ -4,6 +4,7 @@ from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 from sqlalchemy import select, func
 from datetime import datetime, timedelta
 from app.states import OnboardingForm, ProblemForm, AdminForm, StatusUpdateForm, FeedbackForm
@@ -223,7 +224,7 @@ async def format_similar_info(problem, session) -> str:
         f"📝 {problem.text[:80]}{'...' if len(problem.text)>80 else ''}{comment}\n\n"
     )
 
-@router.message(Command("start"))
+@router.message(Command("start"), State("*"))
 async def cmd_start(message: Message, state: FSMContext):
     await delete_user_message(message)  # Удаляем команду /start
     await state.clear()
