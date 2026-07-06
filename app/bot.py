@@ -1474,10 +1474,11 @@ async def cancel_submit_problem(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 # Обработка любого текста
+
 @router.message(Command("stats"))
 async def cmd_stats(message: Message):
     if message.from_user.id != settings.ADMIN_ID:
-        await message.answer("️ У вас нет прав для просмотра статистики.")
+        await message.answer("У вас нет прав для просмотра статистики.")
         return
 
     async with async_session() as session:
@@ -1490,21 +1491,18 @@ async def cmd_stats(message: Message):
         role_counts = roles.all()
 
     role_names = {
-        "EMPLOYEE": "👷 Сотрудник",
-        "SUPERVISOR": "👨‍💼 Супервайзер",
-        "DIRECTOR": " Региональный директор"
+        "EMPLOYEE": "Сотрудник",
+        "SUPERVISOR": "Супервайзер",
+        "DIRECTOR": "Региональный директор"
     }
 
     text = "📊 <b>Статистика пользователей</b>\n\n"
-    text += f"👥 <b>Всего зарегистрировано:</b> {total_count}\n\n"
+    text += "👥 <b>Всего зарегистрировано:</b> " + str(total_count) + "\n\n"
     text += "<b>По ролям:</b>\n"
-    text += "<b>По ролям:</b>
-"
-    
+
     for role, count in role_counts:
         name = role_names.get(role, role)
-        text += f"• {name}: {count}
-"
+        text += "• " + name + ": " + str(count) + "\n"
 
     await message.answer(text, parse_mode="HTML")
 
