@@ -1495,12 +1495,9 @@ async def cmd_stats(message: Message):
         "DIRECTOR": " Региональный директор"
     }
 
-    text = f"📊 <b>Статистика пользователей</b>
-
-"
-    text += f"👥 <b>Всего зарегистрировано:</b> {total_count}
-
-"
+    text = "📊 <b>Статистика пользователей</b>\n\n"
+    text += f"👥 <b>Всего зарегистрировано:</b> {total_count}\n\n"
+    text += "<b>По ролям:</b>\n"
     text += "<b>По ролям:</b>
 "
     
