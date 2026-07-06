@@ -242,8 +242,11 @@ async def cmd_start(message: Message, state: FSMContext):
         )
     else:
         await smart_send(message,
-            "🤖 <b>Привет! Я бот Супер Кайдзен</b>\n\n"
-            "Я создан для фиксации проблем магазинов. Сотрудники фиксируют проблемы, искусственный интеллект их обрабатывает, руководители анализируют и решают их\n\n"
+            "🤖 <b>Привет! Я — бот Супер Кайдзен с ИИ ассистентом 🤖</b>\n\n"
+            "Это умная замена привычной доске проблем. Вместо того чтобы заполнять таблицы, просто опиши проблему — я сделаю остальное:\n\n"
+            "🔍 Найду похожие случаи через ИИ\n"
+            "📋 Автоматически определю категорию\n"
+            "📊 Подготовлю краткое резюме для руководства\n\n"
             "Давай настроим твой профиль. Кем ты работаешь?",
             parse_mode="HTML",
             reply_markup=get_role_keyboard()
@@ -265,7 +268,7 @@ async def cmd_change_role(message: Message, state: FSMContext):
     await change_user_role(message.from_user.id)
     await state.clear()
     await smart_send(message, 
-        "🤖 <b>Бот «Супер Кайдзен с ИИ»</b>\n\n"
+        "🤖 <b>Бот «Супер Кайдзен с ИИ ассистентом с ИИ»</b>\n\n"
         "Бот для фиксации проблем магазинов: Сотрудники фиксируют проблемы, искусственный интеллект их обрабатывает, руководители анализируют и решают их\n\n"
         "Выберите вашу роль:",
         parse_mode="HTML",
@@ -1082,7 +1085,7 @@ async def action_feedback(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "action_instruction")
 async def action_instruction(callback: CallbackQuery, state: FSMContext):
     await smart_send(callback, 
-        "📖 <b>Инструкция по работе с ботом «Супер Кайдзен»</b>\n\n"
+        "📖 <b>Инструкция по работе с ботом «Супер Кайдзен с ИИ ассистентом»</b>\n\n"
         "1️⃣ <b>Регистрация</b> — выберите роль и пройдите настройку\n"
         "2️⃣ <b>Проблема</b> — опишите любую проблему или идею\n"
         "3️⃣ <b>Отчеты</b> — супервайзеры и директора видят сводку\n"
@@ -1238,7 +1241,7 @@ async def btn_home(message: Message, state: FSMContext):
         await smart_send(message, "Главное меню:", reply_markup=get_main_menu(user.role))
     else:
         await smart_send(message, 
-            "Привет! Я бот «Супер Кайдзен».\n\n"
+            "Привет! Я бот «Супер Кайдзен с ИИ ассистентом».\n\n"
             "Давай настроим твой профиль. Кем ты работаешь?",
             reply_markup=get_role_keyboard()
         )
@@ -1249,7 +1252,7 @@ async def btn_change_role_text(message: Message, state: FSMContext):
     await state.clear()
     await change_user_role(message.from_user.id)
     await smart_send(message, 
-        "🤖 <b>Бот «Супер Кайдзен»</b>\n\n"
+        "🤖 <b>Бот «Супер Кайдзен с ИИ ассистентом»</b>\n\n"
         "Бот для фиксации проблем магазинов: Сотрудники фиксируют проблемы, искусственный интеллект их обрабатывает, руководители анализируют и решают их\n\n"
         "Выберите вашу роль:",
         parse_mode="HTML",
@@ -1270,7 +1273,7 @@ async def btn_feedback_text(message: Message, state: FSMContext):
 async def btn_instruction(message: Message, state: FSMContext):
     await delete_user_message(message)
     await smart_send(message, 
-        "📖 <b>Инструкция по работе с ботом «Супер Кайдзен»</b>\n\n"
+        "📖 <b>Инструкция по работе с ботом «Супер Кайдзен с ИИ ассистентом»</b>\n\n"
         "1️⃣ <b>Регистрация</b> — выберите роль и пройдите настройку\n"
         "2️⃣ <b>Проблема</b> — опишите любую проблему или идею\n"
         "3️⃣ <b>Отчеты</b> — супервайзеры и директора видят сводку\n"
