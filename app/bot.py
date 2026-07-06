@@ -1474,6 +1474,44 @@ async def cancel_submit_problem(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 # Обработка любого текста
+@router.message(Command("stats"))
+async def cmd_stats(message: Message):
+    if message.from_user.id != settings.ADMIN_ID:
+        await message.answer("️ У вас нет прав для просмотра статистики.")
+        return
+
+    async with async_session() as session:
+        total = await session.execute(select(func.count(User.tg_id)))
+        total_count = total.scalar()
+
+        roles = await session.execute(
+            select(User.role, func.count(User.tg_id)).group_by(User.role)
+        )
+        role_counts = roles.all()
+
+    role_names = {
+        "EMPLOYEE": "👷 Сотрудник",
+        "SUPERVISOR": "👨‍💼 Супервайзер",
+        "DIRECTOR": " Региональный директор"
+    }
+
+    text = f"📊 <b>Статистика пользователей</b>
+
+"
+    text += f"👥 <b>Всего зарегистрировано:</b> {total_count}
+
+"
+    text += "<b>По ролям:</b>
+"
+    
+    for role, count in role_counts:
+        name = role_names.get(role, role)
+        text += f"• {name}: {count}
+"
+
+    await message.answer(text, parse_mode="HTML")
+
+
 @router.message(F.text)
 async def handle_any_message(message: Message, state: FSMContext):
     current_state = await state.get_state()
@@ -1797,33 +1835,4 @@ async def select_new_status(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 
-@router.message(Command("stats"))
-async def cmd_stats(message: Message):
-    if message.from_user.id != settings.ADMIN_ID:
-        await message.answer("️ У вас нет прав для просмотра статистики.")
-        return
 
-    async with async_session() as session:
-        total = await session.execute(select(func.count(User.tg_id)))
-        total_count = total.scalar()
-
-        roles = await session.execute(
-            select(User.role, func.count(User.tg_id)).group_by(User.role)
-        )
-        role_counts = roles.all()
-
-    role_names = {
-        "EMPLOYEE": "👷 Сотрудник",
-        "SUPERVISOR": "👨‍💼 Супервайзер",
-        "DIRECTOR": " Региональный директор"
-    }
-
-    text = f"📊 <b>Статистика пользователей</b>\n\n"
-    text += f"👥 <b>Всего зарегистрировано:</b> {total_count}\n\n"
-    text += "<b>По ролям:</b>\n"
-    
-    for role, count in role_counts:
-        name = role_names.get(role, role)
-        text += f"• {name}: {count}\n"
-
-    await message.answer(text, parse_mode="HTML")
