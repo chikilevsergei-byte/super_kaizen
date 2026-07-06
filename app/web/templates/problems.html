@@ -1,8 +1,18 @@
 {% extends "base.html" %}
+
 {% block title %}Проблемы - Super Kaizen Admin{% endblock %}
+
 {% block content %}
 <h1>Проблемы</h1>
-<table class="data-table">
+
+{% if error %}
+<div class="alert alert-error">
+    <strong>Ошибка:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if problems %}
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -10,20 +20,27 @@
             <th>Магазин</th>
             <th>Описание</th>
             <th>Статус</th>
-            <th>Дата</th>
+            <th>Создано</th>
         </tr>
     </thead>
     <tbody>
         {% for problem in problems %}
         <tr>
             <td>{{ problem.id }}</td>
-            <td>{{ problem.user_tg_id }}</td>
-            <td>{{ problem.store_name }}</td>
-            <td>{{ problem.description[:50] }}...</td>
-            <td>{{ problem.status.value }}</td>
-            <td>{{ problem.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ problem.user_id }}</td>
+            <td>{{ problem.store_id }}</td>
+            <td>{{ problem.text[:100] }}{% if problem.text|length > 100 %}...{% endif %}</td>
+            <td>
+                <span class="status">
+                    {{ problem.status.value }}
+                </span>
+            </td>
+            <td>{{ problem.created_at.strftime('%d.%m.%Y %H:%M') if problem.created_at else 'N/A' }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% else %}
+<p>Нет проблем для отображения.</p>
+{% endif %}
 {% endblock %}

@@ -1,27 +1,42 @@
 {% extends "base.html" %}
+
 {% block title %}Пользователи - Super Kaizen Admin{% endblock %}
+
 {% block content %}
 <h1>Пользователи</h1>
-<table class="data-table">
+
+{% if error %}
+<div class="alert alert-error">
+    <strong>Ошибка:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if users %}
+<table>
     <thead>
         <tr>
             <th>TG ID</th>
             <th>Имя</th>
             <th>Роль</th>
-            <th>Магазин</th>
-            <th>Дата регистрации</th>
+            <th>Магазин ID</th>
+            <th>Кластер</th>
+            <th>Регион</th>
         </tr>
     </thead>
     <tbody>
         {% for user in users %}
         <tr>
             <td>{{ user.tg_id }}</td>
-            <td>{{ user.full_name }}</td>
-            <td>{{ user.role }}</td>
-            <td>{{ user.store_name or '-' }}</td>
-            <td>{{ user.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.role.value }}</td>
+            <td>{{ user.store_id or '-' }}</td>
+            <td>{{ user.cluster or '-' }}</td>
+            <td>{{ user.region or '-' }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% else %}
+<p>Нет пользователей для отображения.</p>
+{% endif %}
 {% endblock %}

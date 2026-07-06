@@ -12,9 +12,10 @@ class Settings(BaseSettings):
     YANDEX_API_KEY: Optional[str] = None
     YANDEX_PROJECT_ID: Optional[str] = None
     YANDEX_PROMPT_ID: Optional[str] = None
+    ADMIN_PASSWORD: str = "changeme"  # Пароль для веб-админки
 
     class Config:
         env_file = ".env"
-        extra = "ignore"  # Игнорировать лишние поля
+        extra = "ignore"
 
 settings = Settings()

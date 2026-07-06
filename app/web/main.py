@@ -21,11 +21,10 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 templates = Jinja2Templates(directory="app/web/templates")
 app.mount("/static", StaticFiles(directory="app/web/static"), name="static")
 
-# Пароль администратора
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
+# Пароль администратора из settings
+ADMIN_PASSWORD = settings.ADMIN_PASSWORD
 
 def get_current_user(request: Request):
-    """Проверка аутентификации"""
     if not request.session.get("authenticated"):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     return True
@@ -39,10 +38,16 @@ async def login(request: Request):
     form = await request.form()
     password = form.get("password")
     
+    print(f"🔐 Попытка входа с паролем: {password}")
+    print(f"🔐 Ожидаемый пароль: {ADMIN_PASSWORD}")
+    print(f"🔐 Совпадение: {password == ADMIN_PASSWORD}")
+    
     if password == ADMIN_PASSWORD:
         request.session["authenticated"] = True
+        print(f"✅ Успешный вход! Сессия: {request.session}")
         return RedirectResponse(url="/", status_code=303)
     
+    print(f"❌ Неверный пароль")
     return templates.TemplateResponse("login.html", {
         "request": request,
         "error": "Неверный пароль"
@@ -55,6 +60,7 @@ async def logout(request: Request):
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request, authenticated: bool = Depends(get_current_user)):
+    print(f"📊 Запрос к dashboard, сессия: {request.session}")
     async with async_session() as session:
         total_users = await session.execute(select(func.count(User.tg_id)))
         total_problems = await session.execute(select(func.count(Problem.id)))
@@ -97,7 +103,7 @@ async def feedback_list(request: Request, authenticated: bool = Depends(get_curr
 async def users_list(request: Request, authenticated: bool = Depends(get_current_user)):
     async with async_session() as session:
         result = await session.execute(
-            select(User).order_by(User.created_at.desc())
+            select(User).order_by(User.tg_id.desc())
         )
         users = result.scalars().all()
     
