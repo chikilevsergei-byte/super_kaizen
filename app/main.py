@@ -30,14 +30,14 @@ async def main():
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, lambda: asyncio.create_task(shutdown(bot, server)))
     
-    # Запускаем бота и веб-сервер параллельно
+    # Запускаем веб-сервер как фоновую задачу
+    asyncio.create_task(server.serve())
+    
+    # Запускаем бота (это блокирует выполнение)
     print("🤖 Бот запущен в режиме Long Polling...")
     print("🌐 Веб-админка запущена на http://0.0.0.0:8000")
     
-    await asyncio.gather(
-        dp.start_polling(bot),
-        server.serve()
-    )
+    await dp.start_polling(bot)
 
 async def shutdown(bot: Bot, server: uvicorn.Server):
     print("\n🛑 Завершение работы...")
