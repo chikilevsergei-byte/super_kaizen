@@ -1495,12 +1495,12 @@ async def cmd_stats(message: Message):
         "SUPERVISOR": "Супервайзер",
         "DIRECTOR": "Региональный директор"
     }
-
     text = "📊 <b>Статистика пользователей</b>\n\n"
     text += "👥 <b>Всего зарегистрировано:</b> " + str(total_count) + "\n\n"
     text += "<b>По ролям:</b>\n"
+    text += "<b>По ролям:</b>\n"
 
-    for role, count in role_counts:
+        text += "• " + name + ": " + str(count) + "\n"
         name = role_names.get(role, role)
         text += "• " + name + ": " + str(count) + "\n"
 
