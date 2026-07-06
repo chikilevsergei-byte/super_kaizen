@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Super Kaizen Admin</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <h1>Super Kaizen Admin</h1>
+        <form method="post" action="/login">
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required autofocus>
+            </div>
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+            <button type="submit">Войти</button>
+        </form>
+    </div>
+</body>
+</html>

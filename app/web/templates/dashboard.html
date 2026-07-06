@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Главная - Super Kaizen Admin{% endblock %}
+{% block content %}
+<h1>Панель управления</h1>
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Пользователи</h3>
+        <div class="stat-number">{{ total_users }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Проблемы</h3>
+        <div class="stat-number">{{ total_problems }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Обратная связь</h3>
+        <div class="stat-number">{{ total_feedback }}</div>
+    </div>
+</div>
+{% endblock %}

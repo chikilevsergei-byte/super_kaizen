@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Обратная связь - Super Kaizen Admin{% endblock %}
+{% block content %}
+<h1>Обратная связь</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Сообщение</th>
+            <th>Статус</th>
+            <th>Дата</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for feedback in feedbacks %}
+        <tr>
+            <td>{{ feedback.id }}</td>
+            <td>{{ feedback.user_tg_id }}</td>
+            <td>{{ feedback.message[:50] }}...</td>
+            <td>{{ feedback.status.value }}</td>
+            <td>{{ feedback.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

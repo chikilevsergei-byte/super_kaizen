@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Проблемы - Super Kaizen Admin{% endblock %}
+{% block content %}
+<h1>Проблемы</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Магазин</th>
+            <th>Описание</th>
+            <th>Статус</th>
+            <th>Дата</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for problem in problems %}
+        <tr>
+            <td>{{ problem.id }}</td>
+            <td>{{ problem.user_tg_id }}</td>
+            <td>{{ problem.store_name }}</td>
+            <td>{{ problem.description[:50] }}...</td>
+            <td>{{ problem.status.value }}</td>
+            <td>{{ problem.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

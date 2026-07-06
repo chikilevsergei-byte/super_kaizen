@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Super Kaizen Admin{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Super Kaizen Admin</div>
+        <div class="nav-links">
+            <a href="/">Главная</a>
+            <a href="/problems">Проблемы</a>
+            <a href="/feedback">Обратная связь</a>
+            <a href="/users">Пользователи</a>
+            <a href="/stores">Магазины</a>
+            <a href="/logout">Выход</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

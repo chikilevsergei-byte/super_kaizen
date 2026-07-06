@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Магазины - Super Kaizen Admin{% endblock %}
+{% block content %}
+<h1>Магазины</h1>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Регион</th>
+            <th>Кластер</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for store in stores %}
+        <tr>
+            <td>{{ store.id }}</td>
+            <td>{{ store.name }}</td>
+            <td>{{ store.region }}</td>
+            <td>{{ store.cluster }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
