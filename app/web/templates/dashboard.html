@@ -1,19 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Главная - Super Kaizen Admin{% endblock %}
+
+{% block title %}Super Kaizen Admin{% endblock %}
+
 {% block content %}
 <h1>Панель управления</h1>
-<div class="stats-grid">
+
+<div class="dashboard-grid">
     <div class="stat-card">
-        <h3>Пользователи</h3>
-        <div class="stat-number">{{ total_users }}</div>
+        <div class="stat-label">Активные проблемы</div>
+        <div class="stat-value">{{ active_problems }}</div>
     </div>
+    
     <div class="stat-card">
-        <h3>Проблемы</h3>
-        <div class="stat-number">{{ total_problems }}</div>
+        <div class="stat-label">Решённые проблемы</div>
+        <div class="stat-value">{{ resolved_problems }}</div>
     </div>
+    
     <div class="stat-card">
-        <h3>Обратная связь</h3>
-        <div class="stat-number">{{ total_feedback }}</div>
+        <div class="stat-label">Обратная связь</div>
+        <div class="stat-value">{{ total_feedback }}</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">Пользователи</div>
+        <div class="stat-value">{{ total_users }}</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-label">Магазины</div>
+        <div class="stat-value">{{ total_stores }}</div>
     </div>
 </div>
 {% endblock %}

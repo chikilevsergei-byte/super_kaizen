@@ -11,14 +11,21 @@
         <h1>Super Kaizen Admin</h1>
         <form method="post" action="/login">
             <div class="form-group">
+                <label for="username">Логин:</label>
+                <input type="text" id="username" name="username" placeholder="admin" autofocus>
+            </div>
+            <div class="form-group">
                 <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required autofocus>
+                <input type="password" id="password" name="password" required>
             </div>
             {% if error %}
             <div class="error">{{ error }}</div>
             {% endif %}
             <button type="submit">Войти</button>
         </form>
+        <p style="margin-top:15px; font-size:12px; color:#999; text-align:center;">
+            Оставьте поле "Логин" пустым для входа с основным паролем
+        </p>
     </div>
 </body>
 </html>

@@ -65,3 +65,23 @@ test_*.py
 # Temporary files
 *.tmp
 *.temp
+
+# Debug scripts
+debug_*.py
+diagnose_*.py
+remove_*.py
+revert_*.py
+update_*.py
+*_test.py
+
+# Backups
+*.broken_backup
+*.bak
+*.backup
+*_old.py
+*_backup.py
+
+# Temp files
+requirements_current.txt
+*.tmp
+temp_*

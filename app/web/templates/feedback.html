@@ -1,40 +1,61 @@
 {% extends "base.html" %}
-
-{% block title %}Обратная связь - Super Kaizen Admin{% endblock %}
-
+{% block title %}{% if archive %}Архив обратной связи{% else %}Активная обратная связь{% endif %} - Super Kaizen Admin{% endblock %}
 {% block content %}
-<h1>Обратная связь</h1>
-
-{% if error %}
-<div class="alert alert-error">
-    <strong>Ошибка:</strong> {{ error }}
+<h1>{% if archive %}Архив обратной связи (Решённые){% else %}Активная обратная связь{% endif %}</h1>
+<div class="actions">
+    {% if archive %}
+    <a href="/feedback" class="btn btn-primary">← Активная обратная связь</a>
+    {% else %}
+    <a href="/feedback/archive" class="btn btn-secondary"> Архив решённых</a>
+    {% endif %}
+    <a href="/feedback/export" class="btn btn-secondary">📊 Выгрузить в Excel</a>
 </div>
-{% endif %}
-
 {% if feedbacks %}
 <table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Пользователь</th>
-            <th>Сообщение</th>
-            <th>Телефон</th>
-            <th>Дата</th>
-        </tr>
-    </thead>
+    <thead><tr>
+        <th>ID</th>
+        <th>Пользователь (TG ID)</th>
+        <th>Имя</th>
+        <th>Магазин</th>
+        <th>Кластер</th>
+        <th>Регион</th>
+        <th>Сообщение</th>
+        <th>Телефон</th>
+        <th>Дата</th>
+        <th>Действия</th>
+    </tr></thead>
     <tbody>
-        {% for feedback in feedbacks %}
-        <tr>
-            <td>{{ feedback.id }}</td>
-            <td>{{ feedback.user_id }}</td>
-            <td>{{ feedback.text[:100] }}{% if feedback.text|length > 100 %}...{% endif %}</td>
-            <td>{{ feedback.phone or '-' }}</td>
-            <td>{{ feedback.created_at.strftime('%d.%m.%Y %H:%M') if feedback.created_at else 'N/A' }}</td>
-        </tr>
-        {% endfor %}
+    {% for fb in feedbacks %}
+    <tr>
+        <td>{{ fb.id }}</td>
+        <td>{{ fb.user_id }}</td>
+        <td>{{ fb.user_name or '-' }}</td>
+        <td>{{ fb.store_id or '-' }}</td>
+        <td>{{ fb.cluster or '-' }}</td>
+        <td>{{ fb.region or '-' }}</td>
+        <td>{{ fb.text[:80] }}{% if fb.text|length > 80 %}...{% endif %}</td>
+        <td>{{ fb.phone or '-' }}</td>
+        <td>{{ fb.created_at.strftime('%d.%m.%Y %H:%M') if fb.created_at else '-' }}</td>
+        <td>
+            {% if not archive %}
+            <form method="post" action="/feedback/{{ fb.id }}/resolve" style="display:inline;" onsubmit="return confirm('Пометить как решённый и переместить в архив?')">
+                <button type="submit" class="btn btn-small btn-success">✅ В архив</button>
+            </form>
+            {% else %}
+            <form method="post" action="/feedback/{{ fb.id }}/unresolve" style="display:inline;" onsubmit="return confirm('Вернуть в активные?')">
+                <button type="submit" class="btn btn-small btn-warning">↩️ Из архива</button>
+            </form>
+            {% endif %}
+            
+            <form method="post" action="/feedback/{{ fb.id }}/delete" style="display:inline;" onsubmit="return confirm('Удалить отзыв безвозвратно?')">
+                <button type="submit" class="btn btn-small btn-danger">🗑 Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 {% else %}
-<p>Нет обратной связи для отображения.</p>
+<p>{% if archive %}Нет решённых отзывов.{% else %}Нет новых отзывов.{% endif %}</p>
 {% endif %}
 {% endblock %}

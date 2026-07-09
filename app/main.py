@@ -7,6 +7,10 @@ from app.bot import router
 from app.scheduler import setup_scheduler
 from app.web.main import app as web_app
 
+
+from aiogram import BaseMiddleware
+from typing import Callable, Dict, Any, Awaitable
+
 async def on_shutdown(bot: Bot):
     await bot.session.close()
 
@@ -36,6 +40,10 @@ async def main():
     # Запускаем бота (это блокирует выполнение)
     print("🤖 Бот запущен в режиме Long Polling...")
     print("🌐 Веб-админка запущена на http://0.0.0.0:8000")
+    
+    print(f"📊 Зарегистрировано обработчиков:")
+    print(f"   - Message: {len(dp.message.handlers)}")
+    print(f"   - CallbackQuery: {len(dp.callback_query.handlers)}")
     
     await dp.start_polling(bot)
 

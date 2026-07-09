@@ -9,10 +9,10 @@ class UserRole(str, enum.Enum):
     DIRECTOR = "director"
 
 class ProblemStatus(str, enum.Enum):
-    NEW = "Новая"
-    IN_PROGRESS = "В работе"
-    RESOLVED = "Решена"
-    POSTPONED = "Отложена"
+    NEW = "NEW"
+    IN_PROGRESS = "IN_PROGRESS"
+    RESOLVED = "RESOLVED"
+    POSTPONED = "POSTPONED"
 
 class Base(DeclarativeBase):
     pass
@@ -20,9 +20,9 @@ class Base(DeclarativeBase):
 class Store(Base):
     __tablename__ = 'stores'
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100))
-    cluster: Mapped[str] = mapped_column(String(50))
-    region: Mapped[str] = mapped_column(String(50))
+    cluster: Mapped[str] = mapped_column(String(50), nullable=True)
+    region: Mapped[str] = mapped_column(String(50), nullable=True)
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -32,6 +32,7 @@ class User(Base):
     store_id: Mapped[int] = mapped_column(ForeignKey('stores.id'), nullable=True)
     cluster: Mapped[str] = mapped_column(String(50), nullable=True)
     region: Mapped[str] = mapped_column(String(50), nullable=True)
+    is_blocked: Mapped[bool] = mapped_column(Boolean, default=False)
 
 class Problem(Base):
     __tablename__ = 'problems'
@@ -46,10 +47,15 @@ class Problem(Base):
     is_duplicate: Mapped[bool] = mapped_column(Boolean, default=False)
     original_problem_id: Mapped[int] = mapped_column(ForeignKey('problems.id'), nullable=True)
 
+class FeedbackStatus(str, enum.Enum):
+    NEW = "NEW"
+    RESOLVED = "RESOLVED"
+
 class Feedback(Base):
     __tablename__ = 'feedback'
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.tg_id'))
     text: Mapped[str] = mapped_column(Text)
     phone: Mapped[str] = mapped_column(String, nullable=True)
+    status: Mapped[FeedbackStatus] = mapped_column(Enum(FeedbackStatus), default=FeedbackStatus.NEW)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

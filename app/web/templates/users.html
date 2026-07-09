@@ -1,42 +1,33 @@
 {% extends "base.html" %}
-
 {% block title %}Пользователи - Super Kaizen Admin{% endblock %}
-
 {% block content %}
 <h1>Пользователи</h1>
-
-{% if error %}
-<div class="alert alert-error">
-    <strong>Ошибка:</strong> {{ error }}
-</div>
-{% endif %}
-
 {% if users %}
 <table>
-    <thead>
-        <tr>
-            <th>TG ID</th>
-            <th>Имя</th>
-            <th>Роль</th>
-            <th>Магазин ID</th>
-            <th>Кластер</th>
-            <th>Регион</th>
-        </tr>
-    </thead>
+    <thead><tr><th>TG ID</th><th>Имя</th><th>Роль</th><th>Магазин</th><th>Кластер</th><th>Регион</th><th>Действия</th></tr></thead>
     <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.tg_id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.role.value }}</td>
-            <td>{{ user.store_id or '-' }}</td>
-            <td>{{ user.cluster or '-' }}</td>
-            <td>{{ user.region or '-' }}</td>
-        </tr>
-        {% endfor %}
+    {% for user in users %}
+    <tr>
+        <td>{{ user.tg_id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{% if user.role.value == 'employee' %}Сотрудник магазина{% elif user.role.value == 'supervisor' %}Супервайзер{% elif user.role.value == 'director' %}Региональный директор{% else %}{{ user.role.value }}{% endif %}</td>
+        <td>{{ user.store_id or '-' }}</td>
+        <td>{{ user.cluster or '-' }}</td>
+        <td>{{ user.region or '-' }}</td>
+        <td>
+            <form method="post" action="/users/{{ user.tg_id }}/toggle-block" style="display:inline;">
+                {% if user.is_blocked %}
+                <button type="submit" class="btn btn-small btn-success" onclick="return confirm('Разблокировать пользователя?')"> Разблокировать</button>
+                {% else %}
+                <button type="submit" class="btn btn-small btn-warning" onclick="return confirm('Заблокировать пользователя?')">🔒 Заблокировать</button>
+                {% endif %}
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 {% else %}
-<p>Нет пользователей для отображения.</p>
+<p>Нет пользователей.</p>
 {% endif %}
 {% endblock %}

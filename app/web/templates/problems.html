@@ -1,43 +1,61 @@
 {% extends "base.html" %}
-
-{% block title %}Проблемы - Super Kaizen Admin{% endblock %}
-
+{% block title %}{% if archive %}Архив проблем{% else %}Активные проблемы{% endif %} - Super Kaizen Admin{% endblock %}
 {% block content %}
-<h1>Проблемы</h1>
-
-{% if error %}
-<div class="alert alert-error">
-    <strong>Ошибка:</strong> {{ error }}
+<h1>{% if archive %}Архив проблем (Решённые){% else %}Активные проблемы{% endif %}</h1>
+<div class="actions">
+    {% if archive %}
+    <a href="/problems" class="btn btn-primary">← Активные проблемы</a>
+    {% else %}
+    <a href="/problems/archive" class="btn btn-secondary">📁 Архив решённых</a>
+    {% endif %}
+    <a href="/problems/export" class="btn btn-secondary"> Выгрузить ВСЕ в Excel</a>
 </div>
-{% endif %}
-
 {% if problems %}
 <table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Пользователь</th>
-            <th>Магазин</th>
-            <th>Описание</th>
-            <th>Статус</th>
-            <th>Создано</th>
-        </tr>
-    </thead>
+    <thead><tr>
+        <th>ID</th>
+        <th>Пользователь (TG ID)</th>
+        <th>Имя</th>
+        <th>Магазин</th>
+        <th>Кластер</th>
+        <th>Регион</th>
+        <th>Описание</th>
+        <th>Статус</th>
+        <th>Создано</th>
+        <th>Действия</th>
+    </tr></thead>
     <tbody>
-        {% for problem in problems %}
-        <tr>
-            <td>{{ problem.id }}</td>
-            <td>{{ problem.user_id }}</td>
-            <td>{{ problem.store_id }}</td>
-            <td>{{ problem.text[:100] }}{% if problem.text|length > 100 %}...{% endif %}</td>
-            <td>
-                <span class="status">
-                    {{ problem.status.value }}
-                </span>
-            </td>
-            <td>{{ problem.created_at.strftime('%d.%m.%Y %H:%M') if problem.created_at else 'N/A' }}</td>
-        </tr>
-        {% endfor %}
+    {% for problem in problems %}
+    <tr>
+        <td>{{ problem.id }}</td>
+        <td>{{ problem.user_id }}</td>
+        <td>{{ problem.user_name or '-' }}</td>
+        <td>{{ problem.store_id }}</td>
+        <td>{{ problem.cluster or '-' }}</td>
+        <td>{{ problem.region or '-' }}</td>
+        <td>{{ problem.text[:80] }}{% if problem.text|length > 80 %}...{% endif %}</td>
+        <td>
+            {% if not archive %}
+            <form method="post" action="/problems/{{ problem.id }}/update-status" style="display:inline;">
+                <select name="status" onchange="this.form.submit()">
+                    <option value="Новая" {% if problem.status.value == 'Новая' %}selected{% endif %}>Новая</option>
+                    <option value="В работе" {% if problem.status.value == 'В работе' %}selected{% endif %}>В работе</option>
+                    <option value="Решена" {% if problem.status.value == 'Решена' %}selected{% endif %}>Решена</option>
+                    <option value="Отложена" {% if problem.status.value == 'Отложена' %}selected{% endif %}>Отложена</option>
+                </select>
+            </form>
+            {% else %}
+            {{ problem.status.value }}
+            {% endif %}
+        </td>
+        <td>{{ problem.created_at.strftime('%d.%m.%Y %H:%M') if problem.created_at else '-' }}</td>
+        <td>
+            <form method="post" action="/problems/{{ problem.id }}/delete" style="display:inline;" onsubmit="return confirm('Удалить проблему безвозвратно?')">
+                <button type="submit" class="btn btn-small btn-danger">🗑 Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 {% else %}
