@@ -377,7 +377,7 @@ async def action_problem(callback: CallbackQuery, state: FSMContext):
     print(f"[ACTION_PROBLEM] Получен callback от {callback.from_user.id}, data={callback.data}")
     uid = callback.from_user.id
     if uid in last_bot_messages: del last_bot_messages[uid]
-    await callback.bot.send_message(chat_id=callback.message.chat.id, text="✍️ Напиши текст проблемы или идеи:")
+    await callback.bot.send_message(chat_id=callback.message.chat.id, text="✍️ Напиши текст проблемы:")
     await state.set_state(ProblemForm.text)
     await callback.answer()
 
